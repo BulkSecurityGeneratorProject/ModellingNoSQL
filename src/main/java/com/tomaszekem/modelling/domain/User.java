@@ -19,10 +19,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.time.Instant;
 
-/**
- * A user.
- */
-
 @org.springframework.data.mongodb.core.mapping.Document(collection = "jhi_user")
 public class User extends AbstractAuditingEntity implements Serializable {
 
