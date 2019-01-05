@@ -2,7 +2,10 @@ version: '2'
 services:
     modellingnosql-mongodb:
         image: mongo:4.0.2
+#        volumes:
+#            - mongoVolume:/volumes/ModellingNoSQL/mongodb/:/data/db/
         ports:
             - "27017:27017"
-        # volumes:
-        #     - ~/volumes/jhipster/ModellingNoSQL/mongodb/:/data/db/
+volumes:
+    mongoVolume:
+        external: true

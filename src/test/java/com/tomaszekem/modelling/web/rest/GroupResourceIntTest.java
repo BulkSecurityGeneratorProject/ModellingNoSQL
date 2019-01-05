@@ -91,10 +91,7 @@ public class GroupResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static Group createEntity() {
-        Group group = new Group()
-            .name(DEFAULT_NAME)
-            .category(DEFAULT_CATEGORY);
-        return group;
+        return new Group(DEFAULT_NAME,DEFAULT_CATEGORY);
     }
 
     @Before
@@ -284,17 +281,4 @@ public class GroupResourceIntTest {
         assertThat(groupList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
-    @Test
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Group.class);
-        Group group1 = new Group();
-        group1.setId("id1");
-        Group group2 = new Group();
-        group2.setId(group1.getId());
-        assertThat(group1).isEqualTo(group2);
-        group2.setId("id2");
-        assertThat(group1).isNotEqualTo(group2);
-        group1.setId(null);
-        assertThat(group1).isNotEqualTo(group2);
-    }
 }

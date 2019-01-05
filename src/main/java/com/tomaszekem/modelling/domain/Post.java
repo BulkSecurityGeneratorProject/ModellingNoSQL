@@ -42,6 +42,14 @@ public class Post implements Serializable {
     @Field("comments")
     private Set<PostComment> comments = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+
+    public Post(@NotNull String title, @NotNull String content, Category category) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+    }
+
     public String getId() {
         return id;
     }

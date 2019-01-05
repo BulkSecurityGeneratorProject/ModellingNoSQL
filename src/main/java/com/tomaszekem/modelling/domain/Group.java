@@ -8,15 +8,13 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
 
 import com.tomaszekem.modelling.domain.enumeration.Category;
 
-/**
- * A Group.
- */
 @Document(collection = "group")
 public class Group implements Serializable {
 
@@ -39,6 +37,12 @@ public class Group implements Serializable {
     @DBRef
     @Field("posts")
     private Set<Post> posts = new HashSet<>();
+
+    public Group(@NotNull String name, Category category) {
+        this.name = name;
+        this.category = category;
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
         return id;
@@ -78,9 +82,8 @@ public class Group implements Serializable {
         return members;
     }
 
-    public Group members(Set<User> users) {
-        this.members = users;
-        return this;
+    public void addMembers(Collection<User> users) {
+        this.members.addAll(users);
     }
 
 //    public Group addMembers(User user) {
@@ -120,8 +123,8 @@ public class Group implements Serializable {
 //        return this;
 //    }
 
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
+    public void addPosts(Collection<Post> posts) {
+        this.posts.addAll(posts);
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
