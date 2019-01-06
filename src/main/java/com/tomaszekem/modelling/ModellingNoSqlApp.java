@@ -1,19 +1,9 @@
 package com.tomaszekem.modelling;
 
-import com.google.common.collect.Lists;
 import com.tomaszekem.modelling.config.ApplicationProperties;
 import com.tomaszekem.modelling.config.DefaultProfileUtil;
-
-import com.tomaszekem.modelling.domain.Group;
-import com.tomaszekem.modelling.domain.Post;
-import com.tomaszekem.modelling.domain.PostComment;
-import com.tomaszekem.modelling.domain.User;
-import com.tomaszekem.modelling.domain.enumeration.Category;
-import com.tomaszekem.modelling.repository.GroupRepository;
-import com.tomaszekem.modelling.repository.PostRepository;
-import com.tomaszekem.modelling.repository.UserRepository;
+import com.tomaszekem.modelling.config.data.SampleDataGenerator;
 import io.github.jhipster.config.JHipsterConstants;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,37 +12,28 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ApplicationProperties.class})
 public class ModellingNoSqlApp {
 
     private static final Logger log = LoggerFactory.getLogger(ModellingNoSqlApp.class);
-    private static final int GENERATED_RECORDS_SIZE = 10000;
-    private static final int NUMBER_OF_COMMENTS = 100;
 
     private final Environment env;
+    private final SampleDataGenerator sampleDataGenerator;
 
     @Autowired
-    public ModellingNoSqlApp(Environment env, PostRepository postRepository, UserRepository userRepository, GroupRepository groupRepository) {
+    public ModellingNoSqlApp(Environment env, SampleDataGenerator sampleDataGenerator) {
         this.env = env;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-        this.groupRepository = groupRepository;
+        this.sampleDataGenerator = sampleDataGenerator;
     }
 
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
-    private final GroupRepository groupRepository;
-
-
-    @Transactional
     @PostConstruct
     public void initApplication() {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
@@ -68,45 +49,7 @@ public class ModellingNoSqlApp {
     }
 
     private void insertData() {
-        log.debug("Inserting data");
-        createGroups();
-        log.debug("Inserted data");
-    }
-
-    private void createGroups() {
-        List<Group> groups = Lists.newArrayList();
-        List<User> users = userRepository.findAll();
-        List<Post> posts = createPostsOfUser(users.get(0));
-
-
-        for (int i = 0; i < GENERATED_RECORDS_SIZE; i++) {
-            Group newGroup = new Group("Test Group", Category.CULTURE);
-            newGroup.addMembers(users);
-            newGroup.addPosts(posts);
-            groups.add(newGroup);
-        }
-        groupRepository.insert(groups);
-    }
-
-    private List<Post> createPostsOfUser(User user) {
-        List<Post> posts = new ArrayList<>();
-        for (int i = 0; i < GENERATED_RECORDS_SIZE; i++) {
-            Post newPost = new Post("Title"+i, "Content"+i, Category.CULTURE);
-            newPost.setUser(user);
-            newPost.addComments(prepareCommentsForPost(user));
-            posts.add(newPost);
-        }
-
-        return postRepository.insert(posts);
-    }
-
-    private List<PostComment> prepareCommentsForPost(User author) {
-        List<PostComment> comments = new ArrayList<>();
-        for (int i = 0; i < NUMBER_OF_COMMENTS; i++) {
-            PostComment comment = new PostComment("Content"+i, author);
-            comments.add(comment);
-        }
-        return comments;
+        sampleDataGenerator.insertData();
     }
 
     /**
