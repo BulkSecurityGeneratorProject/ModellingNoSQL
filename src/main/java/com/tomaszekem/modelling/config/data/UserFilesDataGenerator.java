@@ -22,7 +22,7 @@ public class UserFilesDataGenerator {
         this.gridFsTemplate = gridFsTemplate;
     }
 
-    public void createUsersFiles(List<User> users) throws IOException {
+    void createUsersFiles(List<User> users) throws IOException {
         try (InputStream inputStream = new FileInputStream(VPP_FILE_PATH)) {
             for (User user : users) {
                 gridFsTemplate.store(inputStream, "class_diagram.vpp", "vpp", createFileMetaData(user));

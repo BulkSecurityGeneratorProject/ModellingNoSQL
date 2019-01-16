@@ -2,6 +2,7 @@ package com.tomaszekem.modelling.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.tomaszekem.modelling.domain.Post;
+import com.tomaszekem.modelling.domain.enumeration.Category;
 import com.tomaszekem.modelling.repository.PostRepository;
 import com.tomaszekem.modelling.web.rest.errors.BadRequestAlertException;
 import com.tomaszekem.modelling.web.rest.util.HeaderUtil;
@@ -12,14 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -124,5 +123,12 @@ public class PostResource {
 
         postRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
+    }
+
+    @GetMapping("/posts/count/{category}")
+    @Timed
+    public ResponseEntity<Long> countByCategory(@PathVariable Category category) {
+        log.debug("REST request to get count of Posts in category : {}", category);
+        return ResponseEntity.ok().body(postRepository.countAllByCategoryEquals(category));
     }
 }

@@ -1,19 +1,18 @@
 package com.tomaszekem.modelling.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tomaszekem.modelling.domain.enumeration.Category;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import javax.validation.constraints.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
-
-import com.tomaszekem.modelling.domain.enumeration.Category;
+import java.util.Set;
 
 @Document(collection = "group")
 public class Group implements Serializable {
@@ -23,6 +22,7 @@ public class Group implements Serializable {
     @Id
     private String id;
 
+    @Indexed(name = "group_name_index")
     @NotNull
     @Field("name")
     private String name;

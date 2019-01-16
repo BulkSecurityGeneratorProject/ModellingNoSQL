@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +22,9 @@ public class SampleDataGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(SampleDataGenerator.class);
 
-    private static final int GENERATED_RECORDS_SIZE = 10000;
+    private static final int GENERATED_RECORDS_SIZE = 1000;
     private static final int NUMBER_OF_COMMENTS = 100;
+    private static final int NUMBER_OF_POSTS_PER_USER = 100;
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -43,12 +43,14 @@ public class SampleDataGenerator {
     public void insertData() {
         log.debug("Inserting data");
         List<User> users = userRepository.findAll();
-        createGroups(users);
-        try {
-            userFilesDataGenerator.createUsersFiles(users);
-        } catch (IOException e) {
-            log.error("Error in inserting data", e);
-        }
+//        for (int i = 0; i < 10; i++) {
+//            createGroups(users);
+//        }
+//        try {
+//            userFilesDataGenerator.createUsersFiles(users);
+//        } catch (IOException e) {
+//            log.error("Error in inserting data", e);
+//        }
         log.debug("Inserted data");
     }
 
@@ -71,7 +73,7 @@ public class SampleDataGenerator {
 
     private List<Post> createPostsOfUser(User user) {
         List<Post> posts = new ArrayList<>();
-        for (int i = 0; i < GENERATED_RECORDS_SIZE; i++) {
+        for (int i = 0; i < NUMBER_OF_POSTS_PER_USER; i++) {
             Post newPost = new Post("Title" + i, "Content" + i, Category.CULTURE);
             newPost.setUser(user);
             newPost.addComments(prepareCommentsForPost(user));

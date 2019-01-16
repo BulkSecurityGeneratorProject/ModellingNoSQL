@@ -1,11 +1,10 @@
 package com.tomaszekem.modelling.config.dbmigrations;
 
+import com.github.mongobee.changeset.ChangeLog;
+import com.github.mongobee.changeset.ChangeSet;
 import com.tomaszekem.modelling.domain.Authority;
 import com.tomaszekem.modelling.domain.User;
 import com.tomaszekem.modelling.security.AuthoritiesConstants;
-
-import com.github.mongobee.changeset.ChangeLog;
-import com.github.mongobee.changeset.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.Instant;
@@ -90,4 +89,10 @@ public class InitialSetupMigration {
         userUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(userUser);
     }
+
+    @ChangeSet(order = "03", author = "initiator", id = "03-addIndexOnGroupName")
+    public void addIndexUsers(MongoTemplate mongoTemplate) {
+
+    }
+
 }

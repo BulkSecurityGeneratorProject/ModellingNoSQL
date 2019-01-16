@@ -12,14 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -85,7 +83,7 @@ public class GroupResource {
     /**
      * GET  /groups : get all the groups.
      *
-     * @param pageable the pagination information
+     * @param pageable  the pagination information
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)
      * @return the ResponseEntity with status 200 (OK) and the list of groups in body
      */
@@ -101,6 +99,13 @@ public class GroupResource {
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/groups?eagerload=%b", eagerload));
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/groups/by-name/{name}")
+    @Timed
+    public ResponseEntity<List<Group>> getAllGroups(@PathVariable String name, Pageable pageable) {
+        log.debug("REST request to get a groups by name {}", name);
+        return ResponseEntity.ok(groupRepository.findAllByNameLike(name, pageable));
     }
 
     /**
